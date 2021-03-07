@@ -41,11 +41,6 @@ newTaskButton.textContent = "Add task";
 taskContainer.appendChild(newTaskButton);
 
 
-
-
-
-
-
 let createProject = () => {
     let newProjectForm = document.createElement('div');
     newProjectForm.setAttribute("id", "newProjectForm");
@@ -80,35 +75,34 @@ let createTask = () => {
     formSubmitButton.addEventListener('click', submitTaskForm);
 };
 
-//let test = document.createElement('div'); //DELETE THESE
-//test.setAttribute('id','highlightProject');
-//content.appendChild(test);
 
-let renderProjects = (arr) => { // added id
+
+let renderProjects = (arr) => { 
     projectListContainer.innerHTML = '';
     arr.forEach(element => { 
-    //for(let element = 0; i <arr.length; i++){
 
         let projectDiv = document.createElement('div');
+
+        if (element === currentProject.id){//arr[(arr.length -1)]){ 
+            projectDiv.className = 'highlightProject';
+            console.log(element);
+            console.log(currentProject.id);
+            console.log('ran!');
+        }
+        else{
+            projectDiv.className = 'noHighlightProject'; 
+        };
+
         let projectTitle = document.createElement('p');
         let projectDeleteButton = document.createElement('button');
         projectDeleteButton.textContent = 'X';
         projectTitle.textContent = element;
-        
+
+        projectDiv.setAttribute('id', element.toString()); 
+
         projectDiv.appendChild(projectTitle);
         projectDiv.appendChild(projectDeleteButton);
         projectListContainer.appendChild(projectDiv);
-
-        
-        projectDiv.setAttribute('id', element.toString()); 
-        
-
-        if (element === arr[(arr.length -1)]){ 
-            projectDiv.setAttribute('class','highlightProject');
-        }
-        else{
-            projectDiv.setAttribute('class', 'noHighlightProject'); 
-        };
 
 
         projectDiv.addEventListener('click', function(){
@@ -123,14 +117,11 @@ let renderProjects = (arr) => { // added id
         });
 
         projectDeleteButton.addEventListener('click', function(){
-            
             let confirmDelete = confirm('Are you sure you want to delete this project and its tasks?');
             if (confirmDelete === true){
                 projectsArray.forEach((element, index) => {
                     if (element.id === projectDiv.id){
-                        //
                         projectsArray.splice(index,1);
-                        
                     }
                 });
                 projectTitleList.forEach((element,index)=>{
@@ -138,43 +129,16 @@ let renderProjects = (arr) => { // added id
                         projectTitleList.splice(index,1);
                     }
                 });
-
               
               currentProject = projectsArray[(projectsArray.length-1)];
-              renderTasks(currentProject.tasksArray);
-              
-              //renderProjects(projectTitleList);
-              renderProjects(projectTitleList);
-
-            let addClass = document.getElementsByClassName('noHighlightProject');
-            if(addClass.length > 2){
-            let i = addClass.length - 2;
-            addClass[i].setAttribute('class', 'highlightProject');
-          
-            }
-            else if (addClass.length === 2) {
-                let i = addClass.length - 1;
-                addClass[i].setAttribute('class', 'highlightProject');
-
-            }
-            else if (addClass.length === 1) {
-                let i = addClass.length - 1;
-                addClass[i].setAttribute('class', 'highlightProject');
+              //currentProject = projectsArray[0];
+              renderTasks(currentProject.tasksArray); 
+              renderProjects(projectTitleList); 
+         // projectListContainer.childNodes[0].className = "highlightProject";
             
             }
-
-           else if (addClass.length === 0){
-               let fin = document.getElementsByClassName('highlightProject noHighlightProject');
-              fin[0].setAttribute('class', 'highlightProject');
-              fin[1].setAttribute('class', 'highlightProject');
-           }//needd to fix for final div
-            console.log(addClass)
-            //MAYBBE GET CHILD ELEMENTS OF DIV???
-
-            
-            }
-            
         });
+
     });
 };
 

@@ -11,6 +11,7 @@
     padding:20px;
     margin: 15px;
     font-family:Arial, Helvetica, sans-serif;
+    /*width:480px;*/
 }
 body{
     background-color: lightgray;
@@ -19,9 +20,60 @@ body{
 
 
 .highlightProject{
-    background-color:rgb(252, 113, 113);
+    background-color:rgb(247, 238, 157);
+    display: flex;
+    padding:10px;
+    justify-content: space-between;
+    align-items: center;
 }
 .noHighlightProject{
     display: flex;
-    background-color: rgb(171, 185, 245);
+    background-color: rgb(228, 227, 227);
+    padding:10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.projectDeleteButton{
+    color: red;
+    height:25px;
+    width:25px;
+    
+    
+}
+.taskDiv{
+    display:flex;
+    padding:10px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border-left: 3px solid ;
+    background-color: #eee;
+    margin:15px;
+}
+.taskDiv:hover{
+    transform: scale(1.003);
+ 
+    transform-origin: 50% 50%;
+   
+    box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.2);
+  
+    transition: all .2s ease-out;
+}
+#taskDate{
+    font-size:.8em;
+    color:grey;
+}
+.taskDeleteButton{
+    color: red;
+    height:25px;
+    width:25px;
+    
+}
+#newTaskForm{
+    /*display:flex;*/
+    padding:10px;
+    justify-content: space-between;
+    align-items: center;
+    /*flex-wrap: wrap;*/
 }

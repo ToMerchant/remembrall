@@ -1,16 +1,33 @@
 //BUGS
 //1. https://bscottnz.github.io/todo/ this NICE
-import { format, fromUnixTime,} from 'date-fns'
-import { Task, Tasks, Project, submitTaskForm, submitProjectForm, switchProject, projectsArray, projectTitleList, currentProject } from './logic.js';
+//2. 
 
-// const today =format(new Date(),'dd.MM.yyyy');
-// console.log(today);
+document.title = '⚪ Remembrall';
+
+
+import { format, fromUnixTime, } from 'date-fns'
+import { Task, Tasks, Project, addProjectsToStorage, submitTaskForm, submitProjectForm, switchProject, projectsArray, projectTitleList, currentProject } from './logic.js';
+
+
 
 content = document.getElementById('content');
 
 let projectContainer = document.createElement('div');
+projectContainer.style.display = 'inline';
 projectContainer.setAttribute('id', 'projectContainer');
 content.appendChild(projectContainer);
+
+let navButton = document.getElementById('navButton');
+navButton.addEventListener('click', function () {
+    if (projectContainer.style.display === 'inline') {
+        projectContainer.style.display = 'none';
+        renderTasks(currentProject.tasksArray);
+    }
+    else if (projectContainer.style.display === 'none') {
+        projectContainer.style.display = 'inline';
+        renderTasks(currentProject.tasksArray);
+    }
+});
 
 let taskContainer = document.createElement('div');
 taskContainer.setAttribute('id', 'taskContainer');
@@ -57,6 +74,20 @@ let createProject = () => {
     formSubmitButton.textContent = "submit";
     newProjectForm.appendChild(formSubmitButton);
 
+    let formCancelButton = document.createElement('button');
+    formCancelButton.textContent = "cancel";
+    newProjectForm.appendChild(formCancelButton);
+
+    formCancelButton.addEventListener('click', function () {
+        newProjectButton.style.display = 'inline';
+        newTaskButton.style.display = 'inline';
+        //renderTasks(currentProject.tasksArray);
+        newProjectForm.remove();
+    })
+
+    newProjectButton.style.display = 'none';
+    newTaskButton.style.display = 'none';
+
     formSubmitButton.addEventListener('click', submitProjectForm);
 };
 
@@ -97,6 +128,17 @@ let createTask = () => {
         formSubmitButton.textContent = "submit";
         newTaskForm.appendChild(formSubmitButton);
 
+        let formCancelButton = document.createElement('button');
+        formCancelButton.textContent = "cancel";
+        newTaskForm.appendChild(formCancelButton);
+
+        formCancelButton.addEventListener('click', function () {
+            newProjectButton.style.display = 'inline';
+            newTaskButton.style.display = 'inline';
+            renderTasks(currentProject.tasksArray);
+            newTaskForm.remove();
+        })
+
         let lineBreak = document.createElement('br');
         newTaskForm.appendChild(lineBreak);
 
@@ -108,9 +150,13 @@ let createTask = () => {
         notesArea.placeholder = 'Notes...';
         newTaskForm.appendChild(notesArea);
 
-
+        newProjectButton.style.display = 'none';
+        newTaskButton.style.display = 'none';
 
         formSubmitButton.addEventListener('click', submitTaskForm);
+
+
+
     }
 };
 
@@ -122,7 +168,28 @@ let renderProjects = (arr) => {
 
         let projectDiv = document.createElement('div');
 
-        if (element === currentProject.id) {//arr[(arr.length -1)]){ 
+
+        function checkFalse(val) {
+            return val === false;
+        }
+        let iconArrayTest = [];
+   
+            currentProject.tasksArray.forEach(x => {
+                iconArrayTest.push(x.select);
+            })
+
+
+        if (iconArrayTest.every(checkFalse) === true) {
+            projectDiv.style.borderColor = '#1d1d2c';
+
+        }
+        else {
+            projectDiv.style.borderColor = '#e40c2b';
+        }
+
+
+
+        if (element === currentProject.id) {
             projectDiv.className = 'highlightProject';
         }
         else {
@@ -166,10 +233,11 @@ let renderProjects = (arr) => {
                 projectTitleList.forEach((element, index) => {
                     if (element === projectDiv.id) {
                         projectTitleList.splice(index, 1);
+
                     }
                 });
 
-                //currentProject = projectsArray[(projectsArray.length-1)];
+
                 currentProject = projectsArray[0];
                 if (projectTitleList.length > 0) {
                     renderTasks(currentProject.tasksArray);
@@ -177,39 +245,98 @@ let renderProjects = (arr) => {
                 else if (projectTitleList.length === 0) {
                     document.getElementById('taskListContainer').innerHTML = '';
                 }
+
+                addProjectsToStorage();
+
                 renderProjects(projectTitleList);
-                // projectListContainer.childNodes[0].className = "highlightProject";
+
+
+
 
             }
+            else { renderProjects(projectTitleList); }; // tk this
         });
     });
 };
 
 
-
-
 let renderTasks = (arr) => {
     taskListContainer.innerHTML = '';
+
+    if (projectContainer.style.display === 'none') {
+        let taskHeader = document.createElement('div');
+        taskHeader.textContent = currentProject.title;
+        taskHeader.setAttribute('id', 'taskHeader');
+        taskListContainer.appendChild(taskHeader);
+    };
+
+    function checkFalse(val) {
+        return val === false;
+    }
+    let icon = document.getElementById('icon');
+    icon.textContent = '⚪🔴';
+    let iconArrayTest = [];
+    projectsArray.forEach(element => {
+        element.tasksArray.forEach(x => {
+            iconArrayTest.push(x.select);
+        })
+
+    });
+    if (iconArrayTest.every(checkFalse) === true) {
+        icon.textContent = '⚪';
+
+    }
+    else {
+        icon.textContent = '🔴';
+        //  document.getElementsByClassName('highlightProject')[0].style.borderColor = '#e40c2b';
+    }
+
     arr.forEach(element => {
 
-        
 
         let taskDiv = document.createElement('div');
         taskDiv.setAttribute('class', 'taskDiv');
         taskDiv.setAttribute('id', element.title);
         taskListContainer.appendChild(taskDiv);
 
+
+        taskDiv.addEventListener('click', function() {
+            if (element.select === true) {
+                element.select = false;
+                document.title = '⚪ Remembrall';
+
+            }
+            else {
+
+                projectsArray.forEach(element => {
+                    element.tasksArray.forEach(x => {
+                        x.select = false;
+                    })
+                })
+                element.select = true;
+
+
+            }
+            renderTasks(currentProject.tasksArray);
+            renderProjects(projectTitleList);
+        });
+
+        if (element.select === true) {
+            document.title = '🔴 ' + element.title.toString() + ' | Remembrall';
+            taskDiv.style.backgroundColor = '#e2465d';
+        }
+
         let taskCheckbox = document.createElement('input');
         taskCheckbox.setAttribute("type", "checkbox");
         taskCheckbox.setAttribute('id', 'taskCheckbox');
-     
 
-        taskDiv.appendChild(taskCheckbox);
+
+
         taskCheckbox.addEventListener('click', function () {
- 
+
             element.checked ? (element.checked = false) : (element.checked = true);
             renderTasks(currentProject.tasksArray);
- 
+
         });
 
         let taskTitle = document.createElement('p');
@@ -217,42 +344,42 @@ let renderTasks = (arr) => {
         taskTitle.textContent = element.title;
         taskDiv.appendChild(taskTitle);
 
-        
+
         let taskDate = document.createElement('div');
-        if(element.date.length>0){
-        taskDate.setAttribute('id', 'taskDate');
-        let taskDateObject = new Date(element.date);
-        let taskDateWeekday = format(taskDateObject, 'EEE')
-        let taskDateMonth= format(taskDateObject, 'MMMM');
-        let taskDateDay = format(taskDateObject, 'do');
-        taskDate.textContent = `${taskDateWeekday} ${taskDateDay} ${taskDateMonth} `;
+        if (element.date.length > 0) {
+            taskDate.setAttribute('id', 'taskDate');
+            let taskDateObject = new Date(element.date);
+            let taskDateWeekday = format(taskDateObject, 'EEE')
+            let taskDateMonth = format(taskDateObject, 'MMMM');
+            let taskDateDay = format(taskDateObject, 'do');
+            taskDate.textContent = `${taskDateWeekday} ${taskDateDay} ${taskDateMonth} `;
         }
-        else{taskDate.textContent = ''};
+        else { taskDate.textContent = '' };
         taskDiv.appendChild(taskDate);
 
         let taskViewNotesButton = document.createElement('button');
+        taskViewNotesButton.setAttribute('class', 'taskViewNotesButton');
         taskViewNotesButton.textContent = '👁️';
         taskDiv.appendChild(taskViewNotesButton);
 
         let notesAreaView = document.createElement('textarea');
-            notesAreaView.setAttribute("type", "text");
-            notesAreaView.rows = 6;
-            notesAreaView.cols = 60;
-            // notesAreView.setAttribute("id", "notesAreaView");
-            notesAreaView.value = element.notes;
-            notesAreaView.style.display = 'none';
-            
+        notesAreaView.setAttribute("type", "text");
+        notesAreaView.rows = 6;
+        notesAreaView.cols = 60;
+        notesAreaView.value = element.notes;
+        notesAreaView.style.display = 'none';
+
 
         taskViewNotesButton.addEventListener('click', function () {
-            
-            if (notesAreaView.style.display === 'none'){
+//taskViewNotesButton.removeEventListener('mouseover', selectTask; //tk
+            if (notesAreaView.style.display === 'none') {
                 notesAreaView.style.display = 'flex';
             }
-            else{
+            else {
                 notesAreaView.style.display = 'none';
             }
         })
-        
+
 
         let taskEditButton = document.createElement('button')
         taskEditButton.textContent = '📝';
@@ -260,6 +387,8 @@ let renderTasks = (arr) => {
         taskDiv.appendChild(taskEditButton);
 
         taskEditButton.addEventListener('click', function () {
+            newProjectButton.style.display = 'none';
+            newTaskButton.style.display = 'none';
             let notesAreaEdit = document.createElement('textarea');
             notesAreaEdit.setAttribute("type", "text");
             notesAreaEdit.rows = 6;
@@ -276,11 +405,10 @@ let renderTasks = (arr) => {
             taskTitle.remove();
             let taskEditTitle = document.createElement('input');
             taskEditTitle.setAttribute("type", "text");
-            //taskEditTitle.placeholder = 'Notes...';
             taskEditTitle.value = element.title;
             taskDiv.insertBefore(taskEditTitle, taskEditButton);
 
-            taskDate.remove(); //tk
+            taskDate.remove();
             let taskDateEdit = document.createElement('input');
             taskDateEdit.setAttribute('type', 'date');
             taskDateEdit.setAttribute('id', 'taskDateEdit');
@@ -296,7 +424,6 @@ let renderTasks = (arr) => {
             taskDiv.appendChild(cancelTaskButton);
 
             let setPriority = document.createElement('select');
-            //setPriority.setAttribute("id", "setPriority");
             let lowPriority = document.createElement('option');
             let mediumPriority = document.createElement('option');
             let highPriority = document.createElement('option');
@@ -309,6 +436,8 @@ let renderTasks = (arr) => {
             taskDiv.insertBefore(setPriority, taskEditButton);
 
             updateTaskButton.addEventListener('click', function () {
+                newProjectButton.style.display = 'inline';
+                newTaskButton.style.display = 'inline';
                 element.notes = notesAreaEdit.value;
                 element.title = taskEditTitle.value;
                 element.priority = setPriority.value;
@@ -322,6 +451,8 @@ let renderTasks = (arr) => {
             });
 
             cancelTaskButton.addEventListener('click', function () {
+                newProjectButton.style.display = 'inline';
+                newTaskButton.style.display = 'inline';
                 renderTasks(currentProject.tasksArray);
 
                 taskCheckbox.style.display = 'inline';
@@ -330,12 +461,15 @@ let renderTasks = (arr) => {
                 taskDeleteButton.style.display = 'inline';
             });
 
+            addProjectsToStorage();
+
         })
 
         let taskDeleteButton = document.createElement('button')
         taskDeleteButton.textContent = 'x';
         taskDeleteButton.className = 'taskDeleteButton'
         taskDiv.appendChild(taskDeleteButton);
+        taskDiv.appendChild(taskCheckbox);
         taskDiv.appendChild(notesAreaView);
 
 
@@ -350,7 +484,7 @@ let renderTasks = (arr) => {
             });
         });
         if (element.checked === false) {
-            taskTitle.style.color = 'black';
+            taskTitle.style.color = '#292929';
             taskTitle.style.textDecoration = 'none';
             taskCheckbox.checked = false;
         }
@@ -377,10 +511,13 @@ let renderTasks = (arr) => {
             else {
                 taskDiv.style.borderColor = 'red';
             }
+
+            addProjectsToStorage();
         };
 
     });
 };
+
 
 
 

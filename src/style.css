@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+
 *{
     margin:0px;
     padding:0px;
@@ -6,6 +9,7 @@
 h1{
     align-self: center;
     font-family:Arial, Helvetica, sans-serif;
+    
     color:#eee; 
     background-image: linear-gradient(45deg, #eee, #e40c2b);
     -webkit-background-clip: text;
@@ -13,7 +17,22 @@ h1{
     -moz-background-clip: text;
     -moz-text-fill-color: transparent;
     
-   
+    /* background-image: linear-gradient(45deg, #eee, #df0122); */
+    
+}
+#navButton{
+    background:none;
+    border:none;
+    font-size:2em;
+    color:#eee;
+    cursor: pointer;
+    align-self: center;
+
+    /* background-image: linear-gradient(45deg, #eee, #e40c2b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent; */
 }
 #icon{
     align-self: center;
@@ -27,10 +46,10 @@ h1{
 }
 #projectContainer{
 
-    color:#444444;
+    color:#1d1d2c;
 
     padding-top:8vh;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: 'Rubik', sans-serif;
     max-width: 300px;
 
     width:20vw;
@@ -42,10 +61,10 @@ h1{
 #taskContainer{
     background-color: white;
     padding-top:8vh;
-    color: #444444;
-    padding:20px;
+    color: #1d1d2c;
+    padding:8vh;
     /* margin: 15px; */
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: 'Rubik', sans-serif;
     /*width:480px;*/
     width:80vw;
     height:90vh;
@@ -58,6 +77,8 @@ h1{
     padding-right: 3vw;
     justify-content: space-between;
     height:7vh;
+    padding-bottom: 5vh;
+    padding-top: 5vh;
     /* background-color: rgb(68, 180, 68);  */
     /* border-bottom: 4px solid black; */
     background-color:#1d1d2c;
@@ -74,7 +95,7 @@ h1{
 
     justify-content: center;
 }
-
+ 
 
 .highlightProject{
     background-color:white;
@@ -87,6 +108,7 @@ h1{
     cursor: pointer;
     margin-bottom: 1.5vh;
     border-left: 3px solid #e40c2b;
+    align-items: center;
     
 }
 .noHighlightProject{
@@ -97,6 +119,7 @@ h1{
     align-items: center;
     cursor: pointer;
     margin-bottom: 1.5vh;
+
  
 }
 .noHighlightProject:hover{
@@ -105,14 +128,14 @@ h1{
 }
 
 .projectDeleteButton{
-    color: red;
-    height:3px;
-    /* height:25px;
-    width:25px; */
     display:none; 
+    color: #1d1d2c;
+    background:none;
+    border:none;
+    cursor: pointer;
 } 
 
- .noHighlightProject:hover > .projectDeleteButton, .projectDeleteButton:hover{
+ .noHighlightProject:hover > .projectDeleteButton{
     display:flex;
 }
 .highlightProject:hover .projectDeleteButton{
@@ -120,7 +143,19 @@ h1{
 }
 
 
-
+.taskBall{
+    background:none;
+    border:none; 
+    font-size:1.5em;
+    cursor: pointer;
+}
+#taskTitle{
+    /* width: 50vw; */
+    padding-left:2vw;
+    font-size:.9em;
+    max-width: 50vw;
+    
+}
 .taskDiv{
     display:flex;
     padding:10px;
@@ -133,8 +168,9 @@ h1{
     margin-left:5vw;
     margin-right:5vw;
     /* border-radius: 5px; */
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    /* font-size:.9em; */
     
 }
 .taskDiv:hover{
@@ -159,42 +195,74 @@ h1{
     color:grey;
 }
 .taskDeleteButton{
-    color: rgb(145, 0, 0);
-    height:25px;
-    width:25px;
+    color: #1d1d2c;
+    background:none;
+    border:none;
+    cursor: pointer;
     display:none;
 }
 .taskDiv:hover > .taskDeleteButton{
     display:flex;
 }
+#taskCheckbox{
+    display:none;
+}
+.taskDiv:hover > #taskCheckbox{
+    display:flex;
+    cursor: pointer;
+}
 .taskEditButton{
     display:none;
+    color: #1d1d2c;
+    background:none;
+    border:none;
+    
 }
 .taskDiv:hover > .taskEditButton{
     display:flex;
+    cursor: pointer;
 }
 .taskViewNotesButton{
     display:none;
+    color: #1d1d2c;
+    background:none;
+    border:none;
 }
 .taskDiv:hover > .taskViewNotesButton{
     display:flex;
+    cursor: pointer;
 }
 #newProjectButton{
-    display:none;
+    display:flex;
+    color:#cacaca;
+    background:none;
+    border:none;
+    font-size:2em;
+    cursor: pointer;
+    float:right;
+    margin-right: 9vw;
 }
-#projectContainer:hover > #newProjectButton{
+/* #projectContainer:hover > #newProjectButton{
     display:flex;
     
-}
+} */
 #newTaskButton{
-    display:none;
+    display:flex;
+    color:#cacaca;
+    background:none;
+    border:none;
+    font-size:2em;
+    cursor: pointer;
+    float:right;
+    margin-right:5vw;
+
     
 }
-#taskContainer:hover > #newTaskButton{
+/* #taskContainer:hover > #newTaskButton{
     display:flex;
     float:right;
     margin-right:5vw;
-}
+} */
 
 #newTaskForm{
     /*display:flex;*/
@@ -203,8 +271,51 @@ h1{
     align-items: center;
     /*flex-wrap: wrap;*/
 }
-#taskTitle{
-    width: 20vw;
-    padding-left:2vw;
-    
+.generalButtons{
+border:none;
+cursor: pointer; 
+padding:3px;
+margin:3px;
+}
+#titleInput{
+    width:18vw;
+}
+#newTaskForm{
+
+   width:80vw;
+    margin-left:5vw;
+    margin-right:5vw;
+    border-radius:5px;
+}
+
+
+@media screen and (max-width:700px){
+
+    #content{
+        display:inline;
+        justify-content: center;
+    }
+    #projectContainer{
+       
+        width:90vw;
+        /* height:30vh; */
+    }
+    #taskContainer{
+        width:95vw;
+        padding:0vh;
+        padding-top:8vh;
+    }
+    #projectListContainer{
+        background-color:#eee;
+    }
+    #newProjectContainer{
+        background-color: #eee;
+    }
+    #notesArea{
+        width:300px;
+    }
+    #notesAreaView{
+        width:300px;
+        margin-top:2vh;
+    }
 }

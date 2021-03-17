@@ -21,7 +21,7 @@ class Project {
         this.title = title;
         this.tasksArray = [];
         this.id = id;
-        
+
         //this.newTask 
 
     }
@@ -29,7 +29,7 @@ class Project {
         let newTask = new Task(title, notes, checked, priority, date, select)
         this.tasksArray.push(newTask)
     }
-    
+
 };
 
 // let projectTitleList = 'using this var only to avoid error';
@@ -49,11 +49,11 @@ class Project {
 let projectTitleList = [];
 
 let projectsArray = 'using this var only to avoid error';
-if (localStorage.getItem('projects')===null){
+if (localStorage.getItem('projects') === null) {
     projectsArray = [];
-    
+
 }
-else if (localStorage.getItem('projects')!==null){
+else if (localStorage.getItem('projects') !== null) {
     let stringprojectsArray = localStorage.getItem('projects');
     let parsedprojectsArray = JSON.parse(stringprojectsArray);
     projectsArray = parsedprojectsArray;
@@ -67,11 +67,11 @@ function addProjectsToStorage() {
 };
 
 let currentProject = '';
-if (projectsArray.length > 0){
- currentProject = projectsArray[0];
- renderTasks(currentProject.tasksArray);
+if (projectsArray.length > 0) {
+    currentProject = projectsArray[0]; 
+    renderTasks(currentProject.tasksArray);
 }
-else {currentProject = '';}
+else { currentProject = ''; }
 
 
 
@@ -86,7 +86,7 @@ if (projectsArray.length === 0) {
         renderProjects(projectTitleList);
         //localStorage.setItem('firstLoaded', '1');
         addProjectsToStorage()
-        
+
     })();
 }
 
@@ -105,7 +105,7 @@ let submitProjectForm = () => {
     renderTasks(currentProject.tasksArray);
 
     addProjectsToStorage();
-    
+
 };
 
 let submitTaskForm = () => {
@@ -125,14 +125,13 @@ let submitTaskForm = () => {
             newTaskForm.remove();
         }
         else {
-            console.log(currentProject)
-            console.log(currentProject.tasksArray)
 
-           // currentProject.newTask((titleInput.value.toString()), (notesArea.value), (false), (setPriority.value), (setDate.value));
-           let newTaskZ = new Task((titleInput.value.toString()), (notesArea.value), (false), (setPriority.value), (setDate.value), (false))
-           currentProject.tasksArray.push(newTaskZ)
-          
-           renderTasks(currentProject.tasksArray);
+
+            // currentProject.newTask((titleInput.value.toString()), (notesArea.value), (false), (setPriority.value), (setDate.value));
+            let newTaskZ = new Task((titleInput.value.toString()), (notesArea.value), (false), (setPriority.value), (setDate.value), (false))
+            currentProject.tasksArray.push(newTaskZ)
+
+            renderTasks(currentProject.tasksArray);
             newTaskForm.remove();
         }
     }
@@ -145,7 +144,7 @@ let switchProject = (divId) => {
         if (divId === element.id) {
             currentProject = element;
             renderTasks(element.tasksArray)
-            
+
 
         }
     })
@@ -155,6 +154,6 @@ let switchProject = (divId) => {
 
 
 
-export { Task, Project, submitTaskForm, submitProjectForm,   addProjectsToStorage, currentProject, switchProject, projectsArray, projectTitleList }
+export { Task, Project, submitTaskForm, submitProjectForm, addProjectsToStorage, currentProject, switchProject, projectsArray, projectTitleList }
 
 

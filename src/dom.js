@@ -51,12 +51,12 @@ taskContainer.appendChild(newTaskContainer);
 
 let newProjectButton = document.createElement('button');
 newProjectButton.setAttribute('id', 'newProjectButton');
-newProjectButton.textContent = "Add project";
+newProjectButton.innerHTML = '<i class="fas fa-plus-square"></i>';
 projectContainer.appendChild(newProjectButton);
 
 let newTaskButton = document.createElement('button');
 newTaskButton.setAttribute('id', 'newTaskButton');
-newTaskButton.textContent = "Add task";
+newTaskButton.innerHTML = '<i class="fas fa-plus-circle"></i>';
 taskContainer.appendChild(newTaskButton);
 
 
@@ -67,15 +67,21 @@ let createProject = () => {
 
     let titleInput = document.createElement('input');
     titleInput.setAttribute("type", "text");
+    titleInput.style.margin ='2px';
     titleInput.setAttribute("id", "titleInput");
+    titleInput.maxLength = '10';
     newProjectForm.appendChild(titleInput);
 
     let formSubmitButton = document.createElement('button');
-    formSubmitButton.textContent = "submit";
+    formSubmitButton.textContent = "Submit";
+    formSubmitButton.setAttribute('class', 'generalButtons');
+    formSubmitButton.style.backgroundColor = 'lightgreen';
     newProjectForm.appendChild(formSubmitButton);
-
     let formCancelButton = document.createElement('button');
-    formCancelButton.textContent = "cancel";
+    formCancelButton.setAttribute('class', 'generalButtons');
+    formCancelButton.style.backgroundColor = '#f75353';
+    formCancelButton.textContent = "Cancel";
+
     newProjectForm.appendChild(formCancelButton);
 
     formCancelButton.addEventListener('click', function () {
@@ -98,16 +104,20 @@ let createTask = () => {
     else {
         let newTaskForm = document.createElement('form');
         newTaskForm.setAttribute("id", "newTaskForm");
+        newTaskForm.style.backgroundColor ='#eee';
         newTaskContainer.appendChild(newTaskForm);
+        newTaskForm.style.radius ='15px';
 
         let titleInput = document.createElement('input');
         titleInput.setAttribute("type", "text");
         titleInput.setAttribute("id", "titleInput");
+        titleInput.style.margin ='2px';
         titleInput.placeholder = 'Title';
         newTaskForm.appendChild(titleInput);
 
         let setPriority = document.createElement('select');
         setPriority.setAttribute("id", "setPriority");
+        setPriority.style.margin ='2px';
         let lowPriority = document.createElement('option');
         let mediumPriority = document.createElement('option');
         let highPriority = document.createElement('option');
@@ -121,15 +131,20 @@ let createTask = () => {
 
         let setDate = document.createElement('input');
         setDate.setAttribute('type', 'date');
+        setDate.style.margin ='2px';
         setDate.setAttribute('id', 'setDate');
         newTaskForm.appendChild(setDate);
 
         let formSubmitButton = document.createElement('button');
-        formSubmitButton.textContent = "submit";
+        formSubmitButton.textContent = "Submit";
+        formSubmitButton.setAttribute('class', 'generalButtons');
+        formSubmitButton.style.backgroundColor = 'lightgreen';
         newTaskForm.appendChild(formSubmitButton);
 
         let formCancelButton = document.createElement('button');
-        formCancelButton.textContent = "cancel";
+        formCancelButton.textContent = "Cancel";
+        formCancelButton.setAttribute('class', 'generalButtons');
+        formCancelButton.style.backgroundColor = '#f75353';
         newTaskForm.appendChild(formCancelButton);
 
         formCancelButton.addEventListener('click', function () {
@@ -144,6 +159,7 @@ let createTask = () => {
 
         let notesArea = document.createElement('textarea');
         notesArea.setAttribute("type", "text");
+        notesArea.setAttribute('id','notesArea');
         notesArea.rows = 6;
         notesArea.cols = 60;
         notesArea.setAttribute("id", "notesArea");
@@ -173,10 +189,10 @@ let renderProjects = (arr) => {
             return val === false;
         }
         let iconArrayTest = [];
-   
-            currentProject.tasksArray.forEach(x => {
-                iconArrayTest.push(x.select);
-            })
+
+        currentProject.tasksArray.forEach(x => {
+            iconArrayTest.push(x.select);
+        })
 
 
         if (iconArrayTest.every(checkFalse) === true) {
@@ -198,7 +214,7 @@ let renderProjects = (arr) => {
 
         let projectTitle = document.createElement('p');
         let projectDeleteButton = document.createElement('button');
-        projectDeleteButton.textContent = 'x';
+        projectDeleteButton.innerHTML = '<i class="fas fa-trash"></i>';
         projectDeleteButton.className = 'projectDeleteButton';
         projectTitle.textContent = element;
 
@@ -284,10 +300,13 @@ let renderTasks = (arr) => {
     });
     if (iconArrayTest.every(checkFalse) === true) {
         icon.textContent = '⚪';
+        document.title = '⚪ Remembrall';
+
 
     }
     else {
         icon.textContent = '🔴';
+        document.title = '🔴 Remembrall';
         //  document.getElementsByClassName('highlightProject')[0].style.borderColor = '#e40c2b';
     }
 
@@ -297,10 +316,10 @@ let renderTasks = (arr) => {
         let taskDiv = document.createElement('div');
         taskDiv.setAttribute('class', 'taskDiv');
         taskDiv.setAttribute('id', element.title);
+        //taskListContainer.appendChild(taskDiv);
         taskListContainer.appendChild(taskDiv);
 
-
-        taskDiv.addEventListener('click', function() {
+        let selectTask = function () {
             if (element.select === true) {
                 element.select = false;
                 document.title = '⚪ Remembrall';
@@ -311,6 +330,7 @@ let renderTasks = (arr) => {
                 projectsArray.forEach(element => {
                     element.tasksArray.forEach(x => {
                         x.select = false;
+
                     })
                 })
                 element.select = true;
@@ -318,13 +338,28 @@ let renderTasks = (arr) => {
 
             }
             renderTasks(currentProject.tasksArray);
-            renderProjects(projectTitleList);
-        });
 
+            renderProjects(projectTitleList);
+        };
+
+        let taskBall = document.createElement('button');
+        taskBall.setAttribute('class', 'taskBall');
         if (element.select === true) {
-            document.title = '🔴 ' + element.title.toString() + ' | Remembrall';
-            taskDiv.style.backgroundColor = '#e2465d';
+            taskBall.textContent = '🔴';
+            // taskBall.backgroundColor = '#eee';
+            // document.title = '⚪ Remembrall';
         }
+        else {
+            taskBall.textContent = '⭕';
+            //document.title = '🔴 Remembrall';
+        }
+        taskDiv.appendChild(taskBall);
+        taskBall.addEventListener('click', selectTask)
+
+
+
+
+        //tk
 
         let taskCheckbox = document.createElement('input');
         taskCheckbox.setAttribute("type", "checkbox");
@@ -359,19 +394,23 @@ let renderTasks = (arr) => {
 
         let taskViewNotesButton = document.createElement('button');
         taskViewNotesButton.setAttribute('class', 'taskViewNotesButton');
-        taskViewNotesButton.textContent = '👁️';
+        taskViewNotesButton.innerHTML = '<i class="fas fa-clipboard"></i>';
         taskDiv.appendChild(taskViewNotesButton);
+
+
 
         let notesAreaView = document.createElement('textarea');
         notesAreaView.setAttribute("type", "text");
+        notesAreaView.setAttribute('id','notesAreaView');
         notesAreaView.rows = 6;
         notesAreaView.cols = 60;
         notesAreaView.value = element.notes;
         notesAreaView.style.display = 'none';
 
 
+
         taskViewNotesButton.addEventListener('click', function () {
-//taskViewNotesButton.removeEventListener('mouseover', selectTask; //tk
+
             if (notesAreaView.style.display === 'none') {
                 notesAreaView.style.display = 'flex';
             }
@@ -382,7 +421,7 @@ let renderTasks = (arr) => {
 
 
         let taskEditButton = document.createElement('button')
-        taskEditButton.textContent = '📝';
+        taskEditButton.innerHTML = '<i class="fas fa-pencil-alt"></i>';
         taskEditButton.className = 'taskEditButton'
         taskDiv.appendChild(taskEditButton);
 
@@ -417,10 +456,15 @@ let renderTasks = (arr) => {
 
             let updateTaskButton = document.createElement('button');
             updateTaskButton.textContent = 'Update';
+            updateTaskButton.setAttribute('class', 'generalButtons');
+            updateTaskButton.style.backgroundColor = 'lightgreen';
             taskDiv.appendChild(updateTaskButton);
 
             let cancelTaskButton = document.createElement('button');
             cancelTaskButton.textContent = 'Cancel';
+            
+            cancelTaskButton.setAttribute('class', 'generalButtons');
+            cancelTaskButton.style.backgroundColor = '#f75353';
             taskDiv.appendChild(cancelTaskButton);
 
             let setPriority = document.createElement('select');
@@ -433,6 +477,7 @@ let renderTasks = (arr) => {
             setPriority.add(lowPriority);
             setPriority.add(mediumPriority);
             setPriority.add(highPriority);
+            setPriority.value = element.priority;
             taskDiv.insertBefore(setPriority, taskEditButton);
 
             updateTaskButton.addEventListener('click', function () {
@@ -466,10 +511,11 @@ let renderTasks = (arr) => {
         })
 
         let taskDeleteButton = document.createElement('button')
-        taskDeleteButton.textContent = 'x';
+        taskDeleteButton.innerHTML = '<i class="fas fa-trash"></i>';
         taskDeleteButton.className = 'taskDeleteButton'
         taskDiv.appendChild(taskDeleteButton);
         taskDiv.appendChild(taskCheckbox);
+        taskDiv.appendChild(taskBall);
         taskDiv.appendChild(notesAreaView);
 
 
@@ -480,11 +526,12 @@ let renderTasks = (arr) => {
                 if (i.title === taskDiv.id) {
                     currentProject.tasksArray.splice(index, 1);
                     renderTasks(currentProject.tasksArray);
+                    renderProjects(projectTitleList);
                 }
             });
         });
         if (element.checked === false) {
-            taskTitle.style.color = '#292929';
+            taskTitle.style.color = '#1d1d2c';
             taskTitle.style.textDecoration = 'none';
             taskCheckbox.checked = false;
         }
@@ -492,7 +539,8 @@ let renderTasks = (arr) => {
             taskTitle.style.color = 'grey';
             taskTitle.style.textDecoration = 'line-through';
             taskCheckbox.checked = true;
-
+            taskBall.textContent = '⚪';
+            taskViewNotesButton.style.color = 'grey';
             taskDeleteButton.style.color = 'grey';
             taskEditButton.style.color = 'grey';
             //taskCheckbox.style.textDecoration = 'line-through';
@@ -503,15 +551,24 @@ let renderTasks = (arr) => {
         }
         else {
             if (element.priority === 'Low priority') {
-                taskDiv.style.borderColor = '#1e90ff';
+                // taskDiv.style.borderColor = '#ffd900';
+                taskDiv.style.borderColor = 'lightblue';
             }
             else if (element.priority === 'Medium priority') {
-                taskDiv.style.borderColor = 'orange';
+                taskDiv.style.borderColor = '#3e86b3';
+                // taskDiv.style.borderColor = 'orange'
             }
             else {
-                taskDiv.style.borderColor = 'red';
+                taskDiv.style.borderColor = '#1d1d2c';
+                // taskDiv.style.borderColor = '#e40c2b'
             }
 
+
+            if (element.select === true) {
+                document.title = '🔴 ' + element.title.toString() + ' | Remembrall';
+                // taskDiv.style.backgroundColor = '#e2465d';
+                taskDiv.style.borderColor = '#e2465d';
+            }
             addProjectsToStorage();
         };
 

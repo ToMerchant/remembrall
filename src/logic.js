@@ -85,6 +85,7 @@ if (projectsArray.length === 0) {
         currentProject = defaultProject;
         renderProjects(projectTitleList);
         //localStorage.setItem('firstLoaded', '1');
+        renderTasks(currentProject.tasksArray);
         addProjectsToStorage()
 
     })();

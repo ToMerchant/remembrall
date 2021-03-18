@@ -10,7 +10,7 @@ import { Task, Tasks, Project, addProjectsToStorage, submitTaskForm, submitProje
 
 
 
-content = document.getElementById('content');
+let content = document.getElementById('content');
 
 let projectContainer = document.createElement('div');
 projectContainer.style.display = 'inline';
